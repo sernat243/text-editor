@@ -27,4 +27,31 @@ warmStrategyCache({
 registerRoute(({ request }) => request.mode === 'navigate', pageCache);
 
 // TODO: Implement asset caching
-registerRoute();
+registerRoute(
+  /\.(png|jpg|jpeg|webp|gif|svg)$/,
+  new CacheFirst({
+    cacheName: 'image-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 50, 
+        maxAgeSeconds: 30 * 24 * 60 * 60, 
+      },
+    ],
+  })
+);
+
+// Cache CSS and JS files with a StaleWhileRevalidate strategy
+registerRoute(
+  /\.(css|js)$/,
+  new StaleWhileRevalidate({
+    cacheName: 'css-js-cache',
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      },
+    ],
+  })
+);
