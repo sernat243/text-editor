@@ -38,7 +38,7 @@ registerRoute(
       new ExpirationPlugin({
         maxEntries: 50, 
         maxAgeSeconds: 30 * 24 * 60 * 60, 
-      },
+      }),
     ],
   })
 );
@@ -51,7 +51,7 @@ registerRoute(
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
-      },
+      }),
     ],
   })
 );
