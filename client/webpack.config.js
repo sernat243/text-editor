@@ -11,11 +11,17 @@ module.exports = () => {
     mode: 'development',
     entry: {
       main: './src/js/index.js',
-      install: './src/js/install.js'
+      install: './src/js/install.js',
+      database: './src/js/database.js',
+      editor: './src/js/editor.js',
+      header: './src/js/header.js'
     },
     output: {
       filename: '[name].bundle.js',
       path: path.resolve(__dirname, 'dist'),
+    },
+    devServer: {
+      hot: 'only',
     },
     plugins: [
       new HtmlWebpackPlugin({
@@ -28,15 +34,20 @@ module.exports = () => {
         background_color: '#225ca3',
         theme_color: '#225ca3',
         start_url: '/',
+        publicPath: '/',
+        fingerprints: false,
+        inject: true,
         icons: [
           {
-            src: path.resolve('src/images/logo.png'),
+            src: path.resolve(__dirname, 'src/images/logo.png'),
             sizes: [96, 128, 192, 256, 384, 512],
+            destination: path.join("assets", "icons"),
           },
         ],
       }),
       new InjectManifest({
         swSrc: './src-sw.js',
+        swDest: "src-sw.js",
       }),
     ],
 
@@ -57,6 +68,10 @@ module.exports = () => {
             loader: 'babel-loader',
             options: {
               presets: ['@babel/preset-env'],
+              plugins: [
+                '@babel/plugin-proposal-object-rest-spread',
+                '@babel/transform-runtime',
+              ]
             },
           },
         },
